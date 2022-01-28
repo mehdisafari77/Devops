@@ -1,4 +1,4 @@
-const {shuffleArray} = require('./utils')
+const {shuffleArray} = require('./utils/utils')
 
 const testArr = [1,2,3,4]
 

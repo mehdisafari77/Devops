@@ -1,8 +1,8 @@
 const express = require('express')
 const path = require('path')
 const app = express()
-const {bots, playerRecord} = require('./data')
-const {shuffleArray} = require('./utils')
+const {bots, playerRecord} = require('./public/data')
+const {shuffleArray} = require('./utils/utils')
 
 // include and initialize the rollbar library with your access token
 var Rollbar = require('rollbar')
@@ -16,20 +16,19 @@ var rollbar = new Rollbar({
 rollbar.log('Hello world!')
 
 app.use(express.json())
-// app.use('/static', express.static(path.join(__dirname, 'public'))) --- to serve files statically
 
 app.get('/', (req, res) => {
-    console.log('hey there')
-    res.sendFile(path.join(__dirname, '/public/index.html'))
-    rollbar.info('html file served successfully!')
+    console.log('Welcome!')
+    res.sendFile(path.join(__dirname, './public/index.html'))
+    rollbar.info('Html file served successfully!')
 })
 
 app.get('/styles', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/index.css'))
+    res.sendFile(path.join(__dirname, './public/index.css'))
 })
 
 app.get('/js', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/index.js'))
+    res.sendFile(path.join(__dirname, './public/index.js'))
 })
 
 app.get('/api/robots', (req, res) => {
@@ -77,7 +76,7 @@ app.post('/api/duel', (req, res) => {
         if (compHealthAfterAttack > playerHealthAfterAttack) {
             playerRecord.losses++
             res.status(200).send('You lost!')
-            rollbar.debug('the computer won')
+            rollbar.debug('Computer won')
         } else {
             playerRecord.losses++
             rollbar.info('Player won')
@@ -85,7 +84,7 @@ app.post('/api/duel', (req, res) => {
         }
     } catch (error) {
         console.log('ERROR DUELING', error)
-        rollbar.warning("something went wrong with the duel")
+        rollbar.warning("Something went wrong with the duel")
         res.sendStatus(400)
     }
 })
